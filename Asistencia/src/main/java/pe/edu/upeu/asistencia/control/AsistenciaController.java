@@ -7,18 +7,19 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import pe.edu.upeu.asistencia.modelo.Estudiante;
-import pe.edu.upeu.asistencia.servicio.EstudianteServicio;
+import pe.edu.upeu.asistencia.modelo.Participante;
+import pe.edu.upeu.asistencia.servicio.ParticipanteServicioI;
 
 @Controller
 public class AsistenciaController {
 
     @Autowired
-    private EstudianteServicio estudianteServicio;
+    ParticipanteServicioI participanteServicioI;
 
     @FXML private Label idMsg;
     @FXML TextField txtDato;
 
+    //@FXML Button btnEnviar;
 
     @FXML
     void enviar(){
@@ -26,21 +27,21 @@ public class AsistenciaController {
         idMsg.setText(txtDato.getText());
     }
 
-
     @FXML
     void regEstudiante(){
+        Participante participante = new Participante();
+        participante.setNombre(new SimpleStringProperty(txtDato.getText()));
+        participante.setEstado(new SimpleBooleanProperty(true));
 
-        Estudiante estudiante=new Estudiante();
-        estudiante.setNombre(new SimpleStringProperty("David"));
-        estudiante.setEstado(new SimpleBooleanProperty(true));
-
-        estudianteServicio.saveEntidad(estudiante);
+        participanteServicioI.save(participante);
         listarEstudiantes();
     }
 
     void listarEstudiantes(){
-        for (Estudiante e: estudianteServicio.findAllEntidades()){
+        for (Participante e: participanteServicioI.findAll()){
             System.out.println(e.getNombre());
         }
     }
+
+
 }
